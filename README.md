@@ -28,6 +28,7 @@ npm install
 ### Environment Variables
 ```env
 DOMAIN_URL='http://localhost:3000'
+DATABASE_URL=<mongodb_url_setup>
 ```
 
 ### Running the Application
