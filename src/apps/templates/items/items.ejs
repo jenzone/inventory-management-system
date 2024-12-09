@@ -9,11 +9,11 @@
         <link href="/global.css" rel="stylesheet">
     </head>
     <body class="w-full h-auto">
-        <div class="flex items-center p-40 flex-col space-y-10">
+        <div class="flex items-center lg:p-40 md:p-20 flex-col space-y-10">
             <div class="flex items-center">
                 <h1 class="uppercase font-bold text-2xl">Inventory Management System</h1>
             </div>
-            <div class="flex flex-col space-y-4 items-center w-full max-w-[1000px]">
+            <div class="flex flex-col space-y-4 items-center w-full">
                 <div class="flex flex-row w-full justify-between items-center space-x-20">
                     <!-- results -->
                     <p class="uppercase text-sm font-bold">
@@ -62,32 +62,32 @@
                     </div>
                 </div>
                 <!-- table -->
-                <table id="ims_table" class="rounded-t overflow-hidden shadow-sm w-full ">
+                <div id="ims_table" class="overflow-x-auto w-full rounded-t shadow-sm">
+                    <table class="w-full">
                     <thead class="uppercase text-sm bg-zinc-200" >
                         <tr class="text-left">
-                            <th class="px-6 py-3">Name</th>
-                            <th class="px-6 py-3">Category</th>
-                            <th class="px-6 py-3">Quantity</th>
-                            <th class="px-6 py-3">Price</th>
-                            <th class="px-6 py-3">Description</th>
-                            <th class="px-6 py-3">Created Date</th>
-                            <th class="px-6 py-3">Actions</th>
+                            <th class="px-6 py-3 whitespace-nowrap">Name</th>
+                            <th class="px-6 py-3 whitespace-nowrap">Category</th>
+                            <th class="px-6 py-3 whitespace-nowrap">Quantity</th>
+                            <th class="px-6 py-3 whitespace-nowrap">Price</th>
+                            <th class="px-6 py-3 whitespace-nowrap">Description</th>
+                            <th class="px-6 py-3 whitespace-nowrap">Created Date</th>
+                            <th class="px-6 py-3 whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="text-sm capitalize">
                         <% if (data.length !== 0) { %>
                             <% for (const item of data) { %>
                                 <tr class="text-left border-b hover:bg-zinc-100 cursor-pointer" >
-
-                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'"><%= item.name %></td>
-                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'"><%= item.category %></td>
-                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'"><%= item.quantity %></td>
-                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'">₱ <%= item.price %></td>
-                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'">
-                                        <%= item.description.length > 20 ? item.description.substring(0, 20) + '...' : item.description %>
+                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'"><%= item.name %></td>
+                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'"><%= item.category %></td>
+                                    <td class="px-6 py-3 whitespace-nowrap <%= item.quantity === 0 ? 'text-red-600' : '' %>" onclick="window.location.href='/items/<%= item._id %>'"><%= item.quantity %></td>
+                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'">₱ <%= item.price %></td>
+                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'">
+                                        <%= item.description.length > 14 ? item.description.substring(0, 14) + '...' : item.description %>
                                     </td>
-                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'"><%= item.createdAt %></td>
-                                    <td class="py-3 flex space-x-4">
+                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'"><%= item.createdAt %></td>
+                                    <td class="px-6 py-3 flex space-x-4 items-center justify-center">
                                         <!-- <button
                                             type="button"
                                             class="px-2 py-1 text-xs font-bold uppercase bg-green-500 rounded text-white"
