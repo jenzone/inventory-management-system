@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            <%= search ? search.toUpperCase() : filter ? filter.toUpperCase() : 'All Items' %>
+        </title>
+        <link href="/global.css" rel="stylesheet">
+    </head>
+    <body class="w-full h-auto">
+        <div class="flex items-center p-40 flex-col space-y-10">
+            <div class="flex items-center">
+                <h1 class="uppercase font-bold text-2xl">Inventory Management System</h1>
+            </div>
+            <div class="flex flex-col space-y-4 items-center w-full max-w-[1000px]">
+                <div class="flex flex-row w-full justify-between items-center space-x-20">
+                    <!-- results -->
+                    <p class="uppercase text-sm font-bold">
+                      Results : <%= totalItems %>
+                    </p>
+                    <div class="flex space-x-4">
+                        <!-- search-->
+                        <form class="flex space-x-1 rounded border-2" action="/items" >
+                            <input name="search" placeholder="Search..." class="px-2 py-1 outline-none" value="<%= search %>" required/>
+                            <button
+                                type="submit"
+                                class="bg-zinc-200 hover:bg-zinc-300 w-full h-full p-1 transition-colors duration-200 ease-in-out"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21l-4.3-4.3"/></g></svg>
+                            </button>
+                        </form>
+                        <!-- filter category -->
+                        <form action="/items">
+                            <select name="filter" class="px-4 py-2 rounded" onchange="form.submit()">
+                                <option value="">Select Filter...</option>
+                                <hr/>
+                                <optgroup label="Category">
+                                    <% for (const category of categories) { %>
+                                        <option
+                                            value="<%= category.toLowerCase() %>"
+                                            <%= filter === category ? 'selected': '' %>
+                                            >
+                                            <%= category.charAt(0).toUpperCase() + category.slice(1) %>
+                                        </option>
+                                    <% } %>
+                                </optgroup>
+                                <optgroup label="Status">
+                                    <option value="all-items" <%= filter === 'all-items' ? 'selected' : '' %>>All Items</option>
+                                    <option value="in-stock" <%= filter === 'in-stock' ? 'selected' : '' %>>In Stock</option>
+                                    <option value="out-of-stock" <%= filter === 'out-of-stock' ? 'selected' : '' %>>Out of Stock</option>
+                                </optgroup>
+                            </select>
+                        </form>
+                        <button class="ml-2 px-2 py-1 text-xs font-bold uppercase bg-green-500 rounded text-white" onclick="window.location.href='/items/new'">
+                            Add New Item
+                        </button>
+                        <!-- reset filter -->
+                        <button type="reset" class="ml-2 px-2 py-1 text-xs font-bold uppercase bg-orange-500 rounded text-white" onclick="window.location.href='/items'">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+                <!-- table -->
+                <table id="ims_table" class="rounded-t overflow-hidden shadow-sm w-full ">
+                    <thead class="uppercase text-sm bg-zinc-200" >
+                        <tr class="text-left">
+                            <th class="px-6 py-3">Name</th>
+                            <th class="px-6 py-3">Category</th>
+                            <th class="px-6 py-3">Quantity</th>
+                            <th class="px-6 py-3">Price</th>
+                            <th class="px-6 py-3">Description</th>
+                            <th class="px-6 py-3">Created Date</th>
+                            <th class="px-6 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm capitalize">
+                        <% if (data.length !== 0) { %>
+                            <% for (const item of data) { %>
+                                <tr class="text-left border-b hover:bg-zinc-100 cursor-pointer" >
+
+                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'"><%= item.name %></td>
+                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'"><%= item.category %></td>
+                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'"><%= item.quantity %></td>
+                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'">₱ <%= item.price %></td>
+                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'">
+                                        <%= item.description.length > 20 ? item.description.substring(0, 20) + '...' : item.description %>
+                                    </td>
+                                    <td class="px-6 py-3" onclick="window.location.href='/items/<%= item._id %>'"><%= item.createdAt %></td>
+                                    <td class="py-3 flex space-x-4">
+                                        <!-- <button
+                                            type="button"
+                                            class="px-2 py-1 text-xs font-bold uppercase bg-green-500 rounded text-white"
+                                            onclick="window.location.href='/<%= item._id %>'"
+                                        >
+                                            View
+                                        </button> -->
+                                        <button
+                                            type="button"
+                                            class="px-2 py-1 text-xs font-bold uppercase bg-blue-500 rounded text-white"
+                                            onclick="window.location.href='/items/<%= item._id %>/edit'"
+                                        >
+                                            Edit
+                                        </button>
+                                        <form action="/items/<%= item._id %>?_method=DELETE" method="POST">
+                                            <button type="submit" class="px-2 py-1 text-xs font-bold uppercase bg-red-500 rounded text-white">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        <% } else { %>
+                            <tr>
+                                <td class="text-center p-20 uppercase font-bold" colspan="10">No Result</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

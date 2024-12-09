@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Item Details</title>
+        <link href="/global.css" rel="stylesheet">
+    </head>
+    <body class="w-full h-auto">
+        <div class="flex items-center p-40 flex-col space-y-10">
+            <div class="flex items-center">
+                <h1 class="uppercase font-bold text-2xl">Inventory Management System</h1>
+            </div>
+            <div class="w-[400px]">
+                <form action="/items/new" method="POST" class="flex flex-col space-y-4">
+                    <h1 class="uppercase text-xl text-green-600 font-bold">Item Details</h1>
+                    <div class="flex flex-col space-y-2">
+                        <div class="uppercase text-xs font-bold">Name</div>
+                        <p><%= item.name %></p>
+                    </div>
+                    <div class="flex flex-col space-y   -2">
+                        <div class="uppercase text-xs font-bold">Category</div>
+                        <p><%= item.category %></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <div class="uppercase text-xs font-bold">Quantity</div>
+                        <p><%= item.quantity %></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <div class="uppercase text-xs font-bold">Price</div>
+                        <p><%= item.price %></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <div class="uppercase text-xs font-bold">Description</div>
+                        <p><%= item.description %></p>
+                    </div>
+                    <div class="flex justify-between pt-10">
+                        <button
+                            type="button"
+                            class="px-5 py-3 text-xs font-bold uppercase bg-blue-500 rounded text-white"
+                            onclick="window.location.href='/items/<%= item._id %>/edit'"
+                        >
+                            Edit
+                        </button>
+                        <!-- <form action="/items/<%= item._id %>?_method=DELETE" method="POST">
+                            <button type="submit" class="px-5 py-3 text-xs font-bold uppercase bg-red-500 rounded text-white">
+                                Delete
+                            </button>
+                        </form> -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

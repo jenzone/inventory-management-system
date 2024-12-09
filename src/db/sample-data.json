@@ -1,0 +1,94 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Product 1",
+      "category": "Electronics",
+      "quantity": 10,
+      "price": 99.99,
+      "description": "High-quality electronic gadget",
+      "createdAt": "2023-01-01T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Product 2",
+      "category": "Books",
+      "quantity": 50,
+      "price": 19.99,
+      "description": "Best-selling novel",
+      "createdAt": "2023-01-03T11:00:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Product 3",
+      "category": "Clothing",
+      "quantity": 25,
+      "price": 49.99,
+      "description": "Stylish t-shirt",
+      "createdAt": "2023-01-05T12:00:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Product 4",
+      "category": "Home & Kitchen",
+      "quantity": 15,
+      "price": 79.99,
+      "description": "Premium kitchen appliance",
+      "createdAt": "2023-01-07T13:00:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Product 5",
+      "category": "Toys",
+      "quantity": 0,
+      "price": 29.99,
+      "description": "Educational toy",
+      "createdAt": "2023-01-09T14:00:00Z"
+    },
+    {
+      "id": 6,
+      "name": "Product 6",
+      "category": "Beauty",
+      "quantity": 20,
+      "price": 39.99,
+      "description": "Luxury skincare product",
+      "createdAt": "2023-01-11T15:00:00Z"
+    },
+    {
+      "id": 7,
+      "name": "Product 7",
+      "category": "Sports",
+      "quantity": 12,
+      "price": 59.99,
+      "description": "High-performance sports gear",
+      "createdAt": "2023-01-13T16:00:00Z"
+    },
+    {
+      "id": 8,
+      "name": "Product 8",
+      "category": "Automotive",
+      "quantity": 8,
+      "price": 149.99,
+      "description": "Advanced car accessory",
+      "createdAt": "2023-01-15T17:00:00Z"
+    },
+    {
+      "id": 9,
+      "name": "Product 9",
+      "category": "Health",
+      "quantity": 18,
+      "price": 69.99,
+      "description": "Natural health supplement",
+      "createdAt": "2023-01-17T18:00:00Z"
+    },
+    {
+      "id": 10,
+      "name": "Product 10",
+      "category": "Grocery",
+      "quantity": 40,
+      "price": 9.99,
+      "description": "Organic food item",
+      "createdAt": "2023-01-19T19:00:00Z"
+    }
+  ]
+}
