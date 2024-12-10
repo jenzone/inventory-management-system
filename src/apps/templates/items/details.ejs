@@ -5,51 +5,91 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Item Details</title>
         <link href="/global.css" rel="stylesheet">
+        <%- include('../partials/meta') %>
     </head>
-    <body class="w-full h-auto">
-        <div class="flex items-center p-40 flex-col space-y-10">
-            <div class="flex items-center">
-                <h1 class="uppercase font-bold text-2xl">Inventory Management System</h1>
-            </div>
-            <div class="w-[400px]">
-                <form action="/items/new" method="POST" class="flex flex-col space-y-4">
-                    <h1 class="uppercase text-xl text-green-600 font-bold">Item Details</h1>
+    <body class="w-full h-screen flex bg-zinc-100 overflow-hidden">
+        <%- include('../partials/menubar') %>
+        <div class="w-full overflow-y-auto">
+            <%- include('../partials/navbar') %>
+            <!-- content -->
+            <div class="flex flex-col space-y-4 bg-white rounded p-4 m-4">
+                <div class="flex flex-col space-y-6">
+                    <h1 class="font-bold text-xl text-teal-600 uppercase">Item Details</h1>
                     <div class="flex flex-col space-y-2">
-                        <div class="uppercase text-xs font-bold">Name</div>
-                        <p><%= item.name %></p>
-                    </div>
-                    <div class="flex flex-col space-y   -2">
-                        <div class="uppercase text-xs font-bold">Category</div>
-                        <p><%= item.category %></p>
+                        <div class="uppercase font-semibold text-sm text-zinc-500">Id: </div>
+                        <p><%= item._id %></p>
                     </div>
                     <div class="flex flex-col space-y-2">
-                        <div class="uppercase text-xs font-bold">Quantity</div>
-                        <p><%= item.quantity %></p>
+                        <div class="uppercase font-semibold text-sm text-zinc-500">Name: </div>
+                        <p class="capitalize"><%= item.name %></p>
                     </div>
                     <div class="flex flex-col space-y-2">
-                        <div class="uppercase text-xs font-bold">Price</div>
-                        <p><%= item.price %></p>
+                        <div class="uppercase font-semibold text-sm text-zinc-500">Category: </div>
+                        <p class="capitalize"><%= item.category %></p>
                     </div>
                     <div class="flex flex-col space-y-2">
-                        <div class="uppercase text-xs font-bold">Description</div>
+                        <div class="uppercase font-semibold text-sm text-zinc-500">Quantity: </div>
+                        <p class="<%= item.quantity === 0 ? 'text-red-600' : '' %>"><%= item.quantity %></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <div class="uppercase font-semibold text-sm text-zinc-500">Price: </div>
+                        <p class="capitalize">₱ <%= item.price %></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <div class="uppercase font-semibold text-sm text-zinc-500">Description: </div>
                         <p><%= item.description %></p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <div class="uppercase font-semibold text-sm text-zinc-500">Created Date: </div>
+                        <p><%= item.createdAt %></p>
                     </div>
                     <div class="flex justify-between pt-10">
                         <button
                             type="button"
                             class="px-5 py-3 text-xs font-bold uppercase bg-blue-500 rounded text-white"
-                            onclick="window.location.href='/items/<%= item._id %>/edit'"
+                            onclick="editItem()"
                         >
                             Edit
                         </button>
-                        <!-- <form action="/items/<%= item._id %>?_method=DELETE" method="POST">
+                        <form id='delete-item-form' action="/items/<%= item._id %>?_method=DELETE" method="POST">
                             <button type="submit" class="px-5 py-3 text-xs font-bold uppercase bg-red-500 rounded text-white">
                                 Delete
                             </button>
-                        </form> -->
+                        </form>
+                        <!-- confirmation modal -->
+                        <div id="confimation-modal" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border border-zinc-300 rounded shadow-lg">
+                            <div class="text-lg font-semibold text-center text-red-600 capitalize pt-4 px-4">Are you sure you want to delete this item?</div>
+                            <div class="flex items-center p-2">
+                                <button id="confirm-btn" class="w-full hover:bg-green-400 p-4 rounded">Yes</button>
+                                <button id="cancel-btn" class="w-full  hover:bg-zinc-200 p-4 rounded">No</button>
+                            </div>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
+        <!-- delete and conformation script -->
+        <script>
+        document.getElementById('delete-item-form').addEventListener('submit', function(event) {
+               event.preventDefault();
+
+               const modal = document.getElementById('confimation-modal');
+               modal.style.display = 'block';
+
+               document.getElementById('confirm-btn').onclick = function() {
+                   modal.style.display = 'none';
+                   document.getElementById('delete-item-form').submit();
+               };
+
+               document.getElementById('cancel-btn').onclick = function() {
+                   modal.style.display = 'none';
+               };
+           });
+        </script>
+        <script>
+            function editItem() {
+              window.location.href = '/items/<%= item._id %>/edit'
+            }
+        </script>
     </body>
 </html>

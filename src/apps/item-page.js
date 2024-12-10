@@ -11,13 +11,17 @@ const ItemPageRouter = Router();
 
 // List all Items
 ItemPageRouter.get("/items", async (req, res) => {
-  const { search, filter } = req.query;
+  const { search, filter, page = "1" } = req.query;
 
   const response = await fetch(`${DOMAIN_URL}/api/items`);
   const result = await response.json();
   const items = result.items;
 
-  const categories = items.map((item) => item.category.toLowerCase());
+  const limit = Math.min(10, items.length);
+
+  const categories = Array.from(
+    new Set(items.map((item) => item.category.toLowerCase())),
+  );
 
   const filteredData = () => {
     const formattedData = items.map((item) => ({
@@ -80,12 +84,22 @@ ItemPageRouter.get("/items", async (req, res) => {
 
   const { data, totalItems } = filteredData();
 
+  const startIndex = (page - 1) * limit + 1; // starting of index of the items dsplayed on the current page
+  const endIndex = Math.min(startIndex + limit - 1, totalItems); // eending index of the items to be displayed
+  const paginatedData = data.slice(startIndex - 1, endIndex); // extacted items based on the current page
+  const totalPages = Math.ceil(totalItems / limit); // total pages of all items that will displayed
+
   res.render("items/items", {
-    data,
+    title: "Items",
+    data: paginatedData,
     totalItems,
     categories,
     search,
     filter,
+    currentPage: parseInt(page),
+    totalPages,
+    startIndex,
+    endIndex,
   });
 });
 
@@ -118,30 +132,40 @@ ItemPageRouter.get("/items/:id", async (req, res) => {
   const result = await response.json();
   const item = result.item;
 
+  const formattedItem = {
+    ...item,
+    createdAt: new Date(item.createdAt).toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }),
+  };
+
   // for sample-data
   // const item = sampleData.data.find((item) => item.id === parseInt(id));
 
-  res.render("items/details", { item: item });
+  res.render("items/details", { item: formattedItem });
 });
 
 // Render the edit item form
 ItemPageRouter.get("/items/:id/edit", async (req, res) => {
   const { id } = req.params;
 
-  const categories = ["Electronics", "Books", "Clothing", "Others"];
-
   const response = await fetch(`${DOMAIN_URL}/api/items/${id}`);
   const result = await response.json();
   const item = result.item;
-
-  // for sample-data
-  // const item = sampleData.data.find((item) => item.id === parseInt(id));
 
   if (!item) {
     return res.status(404).send("Item not found");
   }
 
-  res.render("items/edit", { item: item, categories: categories });
+  // for sample-data
+  // const item = sampleData.data.find((item) => item.id === parseInt(id));
+
+  res.render("items/edit", {
+    title: "Items",
+    item: item,
+  });
 });
 
 // Handle the updating of an item

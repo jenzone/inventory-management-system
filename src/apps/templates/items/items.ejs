@@ -7,18 +7,17 @@
             <%= search ? search.toUpperCase() : filter ? filter.toUpperCase() : 'All Items' %>
         </title>
         <link href="/global.css" rel="stylesheet">
+        <%- include('../partials/meta') %>
     </head>
-    <body class="w-full h-auto">
-        <div class="flex items-center lg:p-40 md:p-20 flex-col space-y-10">
-            <div class="flex items-center">
-                <h1 class="uppercase font-bold text-2xl">Inventory Management System</h1>
-            </div>
-            <div class="flex flex-col space-y-4 items-center w-full">
+    <body class="w-full h-auto flex bg-zinc-100">
+        <%- include('../partials/menubar') %>
+        <div class="w-full">
+            <%- include('../partials/navbar') %>
+            <div class="flex flex-col space-y-4 items-center bg-white rounded p-4 m-4">
                 <div class="flex flex-row w-full justify-between items-center space-x-20">
-                    <!-- results -->
-                    <p class="uppercase text-sm font-bold">
-                      Results : <%= totalItems %>
-                    </p>
+                    <div>
+                        <h1 class="font-bold text-xl text-teal-600 uppercase">Items (<%= totalItems %>)</h1>
+                    </div>
                     <div class="flex space-x-4">
                         <!-- search-->
                         <form class="flex space-x-1 rounded border-2" action="/items" >
@@ -52,72 +51,142 @@
                                 </optgroup>
                             </select>
                         </form>
-                        <button class="ml-2 px-2 py-1 text-xs font-bold uppercase bg-green-500 rounded text-white" onclick="window.location.href='/items/new'">
+                        <button class="ml-2 px-2 py-1 text-xs font-bold uppercase bg-green-500 rounded text-white" onclick="addNewItem()">
                             Add New Item
                         </button>
                         <!-- reset filter -->
-                        <button type="reset" class="ml-2 px-2 py-1 text-xs font-bold uppercase bg-orange-500 rounded text-white" onclick="window.location.href='/items'">
+                        <button type="reset" class="ml-2 px-2 py-1 text-xs font-bold uppercase bg-orange-500 rounded text-white" onclick="resetFilter()">
                             Reset
                         </button>
                     </div>
                 </div>
                 <!-- table -->
-                <div id="ims_table" class="overflow-x-auto w-full rounded-t shadow-sm">
-                    <table class="w-full">
-                    <thead class="uppercase text-sm bg-zinc-200" >
-                        <tr class="text-left">
-                            <th class="px-6 py-3 whitespace-nowrap">Name</th>
-                            <th class="px-6 py-3 whitespace-nowrap">Category</th>
-                            <th class="px-6 py-3 whitespace-nowrap">Quantity</th>
-                            <th class="px-6 py-3 whitespace-nowrap">Price</th>
-                            <th class="px-6 py-3 whitespace-nowrap">Description</th>
-                            <th class="px-6 py-3 whitespace-nowrap">Created Date</th>
-                            <th class="px-6 py-3 whitespace-nowrap">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm capitalize">
-                        <% if (data.length !== 0) { %>
-                            <% for (const item of data) { %>
-                                <tr class="text-left border-b hover:bg-zinc-100 cursor-pointer" >
-                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'"><%= item.name %></td>
-                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'"><%= item.category %></td>
-                                    <td class="px-6 py-3 whitespace-nowrap <%= item.quantity === 0 ? 'text-red-600' : '' %>" onclick="window.location.href='/items/<%= item._id %>'"><%= item.quantity %></td>
-                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'">₱ <%= item.price %></td>
-                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'">
-                                        <%= item.description.length > 14 ? item.description.substring(0, 14) + '...' : item.description %>
-                                    </td>
-                                    <td class="px-6 py-3 whitespace-nowrap" onclick="window.location.href='/items/<%= item._id %>'"><%= item.createdAt %></td>
-                                    <td class="px-6 py-3 flex space-x-4 items-center justify-center">
-                                        <!-- <button
-                                            type="button"
-                                            class="px-2 py-1 text-xs font-bold uppercase bg-green-500 rounded text-white"
-                                            onclick="window.location.href='/<%= item._id %>'"
-                                        >
-                                            View
-                                        </button> -->
-                                        <button
-                                            type="button"
-                                            class="px-2 py-1 text-xs font-bold uppercase bg-blue-500 rounded text-white"
-                                            onclick="window.location.href='/items/<%= item._id %>/edit'"
-                                        >
-                                            Edit
-                                        </button>
-                                        <form action="/items/<%= item._id %>?_method=DELETE" method="POST">
-                                            <button type="submit" class="px-2 py-1 text-xs font-bold uppercase bg-red-500 rounded text-white">
-                                                Delete
+                <div class="w-full flex flex-col space-y-4">
+                    <table id="ims_table" class="w-full rounded-t shadow-sm">
+                        <thead class="uppercase text-sm bg-zinc-200" >
+                            <tr class="text-left">
+                                <th class="px-6 py-3 whitespace-nowrap">Name</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Category</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Quantity</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Price</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Description</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Created Date</th>
+                                <th class="px-6 py-3 whitespace-nowrap">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <% if (data.length !== 0) { %>
+                                <% for (const item of data) { %>
+                                    <tr id="tbody-row" class="text-left border-b hover:bg-zinc-100 cursor-pointer" >
+                                        <td class="px-6 py-3 whitespace-nowrap capitalize" onClick="viewDetails()"><%= item.name %></td>
+                                        <td class="px-6 py-3 whitespace-nowrap capitalize" onClick="viewDetails()"><%= item.category %></td>
+                                        <td class="px-6 py-3 whitespace-nowrap <%= item.quantity === 0 ? 'text-red-600' : '' %>" onClick="viewDetails()"><%= item.quantity %></td>
+                                        <td class="px-6 py-3 whitespace-nowrap" onClick="viewDetails()">₱ <%= item.price %></td>
+                                        <td class="px-6 py-3 whitespace-nowrap" onClick="viewDetails()">
+                                            <%= item.description.length > 14 ? item.description.substring(0, 14) + '...' : item.description %>
+                                        </td>
+                                        <td class="px-6 py-3 whitespace-nowrap" onClick="viewDetails()"><%= item.createdAt %></td>
+                                        <td class="px-6 py-3 flex space-x-4">
+                                            <button
+                                                type="button"
+                                                class="px-2 py-1 text-xs font-bold uppercase bg-blue-500 rounded text-white"
+                                                onclick="editItem()"
+                                            >
+                                                Edit
                                             </button>
-                                        </form>
-                                    </td>
+                                            <form id="delete-form-<%= item._id %>" action="/items/<%= item._id %>?_method=DELETE" method="POST" onsubmit="confirmDelete('delete-form-<%= item._id %>')">
+                                                <button type="submit" class="px-2 py-1 text-xs font-bold uppercase bg-red-500 rounded text-white">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                            <!-- confirmation modal -->
+                                            <div id="confirmation-modal" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border border-zinc-300 rounded shadow-lg">
+                                                <div class="text-lg font-semibold text-center text-red-600 capitalize pt-4 px-4">Are you sure you want to delete this item?</div>
+                                                <div class="flex items-center p-2">
+                                                    <button id="confirm-btn" class="w-full hover:bg-green-400 p-4 rounded">Yes</button>
+                                                    <button id="cancel-btn" class="w-full  hover:bg-zinc-200 p-4 rounded">No</button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- actions script -->
+                                    <script>
+                                        function editItem() {
+                                          window.location.href = '/items/<%= item._id %>/edit'
+                                        }
+
+                                        function viewDetails() {
+                                          window.location.href = '/items/<%= item._id %>';
+                                        }
+                                    </script>
+                                <% } %>
+                            <% } else { %>
+                                <tr>
+                                    <td class="text-center p-20 uppercase font-bold" colspan="10">No Result</td>
                                 </tr>
                             <% } %>
-                        <% } else { %>
-                            <tr>
-                                <td class="text-center p-20 uppercase font-bold" colspan="10">No Result</td>
-                            </tr>
-                        <% } %>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                    <div class="flex justify-between items-center">
+                        <div class="text-sm">
+                            Results: <%= startIndex %> - <%= endIndex %> of <%= totalItems %> Items
+                        </div>
+                        <div class="flex space-x-2">
+                            <button
+                                onclick="previousPage()"
+                                class="uppercase text-sm font-semibold px-2 py-1 bg-zinc-300 rounded <%= currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-zinc-400' %>"
+                                <%= currentPage === 1 ? 'disabled' : '' %>
+                            >
+                                Previous
+                            </button>
+                            <button
+                                onclick="nextPage()"
+                                class="uppercase text-sm font-semibold px-2 py-1 bg-zinc-300 rounded <%= currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-zinc-400' %>"
+                                <%= currentPage === totalPages ? 'disabled' : '' %>
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <!-- delete and conformation script -->
+        <script>
+          function confirmDelete(formId) {
+              event.preventDefault();
+
+              const modal = document.getElementById('confirmation-modal');
+              modal.style.display = 'block';
+
+              document.getElementById('confirm-btn').onclick = function() {
+                  modal.style.display = 'none';
+                  document.getElementById(formId).submit();
+              };
+
+              document.getElementById('cancel-btn').onclick = function() {
+                  modal.style.display = 'none';
+              };
+          }
+        </script>
+        <!--add new item and reset filter script -->
+        <script>
+            function addNewItem() {
+              window.location.href = '/items/new'
+            }
+
+            function resetFilter() {
+              window.location.href = '/items'
+            }
+        </script>
+        <script>
+            function previousPage() {
+              window.location.href='?page=<%= currentPage - 1 %>'
+            }
+
+            function nextPage() {
+              window.location.href='?page=<%= currentPage + 1 %>'
+            }
+        </script>
     </body>
 </html>

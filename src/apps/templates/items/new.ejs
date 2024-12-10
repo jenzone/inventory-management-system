@@ -5,15 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Create New Item</title>
         <link href="/global.css" rel="stylesheet">
+        <%- include('../partials/meta') %>
     </head>
-    <body class="w-full h-auto">
-        <div class="flex items-center p-40 flex-col space-y-10">
-            <div class="flex items-center">
-                <h1 class="uppercase font-bold text-2xl">Inventory Management System</h1>
-            </div>
-            <div class="w-[400px]">
-                <form action="/items/new" method="POST" class="flex flex-col space-y-4">
-                    <h1 class="uppercase text-xl text-green-600 font-bold">Create New Item</h1>
+    <body class="w-full h-screen flex bg-zinc-100 overflow-hidden ">
+        <%- include('../partials/menubar') %>
+        <div class="w-full overflow-y-auto">
+            <%- include('../partials/navbar') %>
+            <div class="flex flex-col space-y-4 bg-white rounded p-4 m-4">
+                <form action="/items/new" method="POST" class="w-[500px] flex flex-col space-y-4 ">
+                    <h1 class="font-bold text-xl text-teal-600 uppercase">Create New Item</h1>
                     <div class="flex flex-col space-y-2">
                         <label for="name" class="uppercase text-xs font-bold">Name</label>
                         <input id="name" name="name" type="text" placeholder="Name..." class="px-2 py-1 outline-none border rounded shadow-sm" required/>
@@ -21,12 +21,6 @@
                     <div class="flex flex-col space-y-2">
                         <label for="category" class="uppercase text-xs font-bold">Category</label>
                         <input id="category" name="category" type="text" placeholder="Category..." class="px-2 py-1 outline-none border rounded shadow-sm" required/>
-                        <!-- <select name="category" class=" px-4 py-2 rounded" required>
-                            <option value="">Select Category</option>
-                            <option id="electronics" value="Electronics">Electronics</option>
-                            <option id="school" value="School">School</option>
-                            <option id="others" value="Others">Others</option>
-                        </select> -->
                     </div>
                     <div class="flex flex-col space-y-2">
                         <label for="quantity" class="uppercase text-xs font-bold">Quantity</label>
